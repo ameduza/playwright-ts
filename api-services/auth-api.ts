@@ -1,4 +1,5 @@
 import { APIRequestContext } from '@playwright/test';
+import { APIConfig } from '../utils/configs/api-config';
 import { BaseRequest } from './baseRequest';
 import { User } from '../types/user-type';
 
@@ -17,7 +18,7 @@ export class AuthAPI {
     }
 
     const response = await this.request.post({
-      url: 'http://localhost:8000/api/users/login',
+      url: APIConfig.login,
       body: { user: { email: user.email, password: user.password } },
     });
 
