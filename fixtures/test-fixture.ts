@@ -15,7 +15,7 @@ export const test = base.extend<TestOptions>({
     const authApi = new AuthAPI(request);
     await use(authApi);
   },
-  
+
   articleApiStep: async ({ authApi, request }, use) => {
     const token = await authApi.getToken(user01);
     const articleApiStep = new ArticleApiStep(request, token);
