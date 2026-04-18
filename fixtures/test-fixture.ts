@@ -11,5 +11,6 @@ export const test = base.extend<TestOptions>({
     articleApi: async ({ request }, use) => {
         const articleApi = new ArticleAPI(request);
         await use(articleApi);
+        await articleApi.cleanUpArticles();
     }
 })

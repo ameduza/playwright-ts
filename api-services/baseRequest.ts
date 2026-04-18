@@ -1,5 +1,5 @@
 import { APIRequestContext } from '@playwright/test';
-import { RequestGetParams, RequestPostParams } from '../types/request';
+import { RequestDeleteParams, RequestGetParams, RequestPostParams } from '../types/request';
 
 export class BaseRequest {
   private request: APIRequestContext;
@@ -13,6 +13,10 @@ export class BaseRequest {
 
   async post(params: RequestPostParams) {
 	return await this.makeRequest('POST', params);
+  }
+
+  async delete(params: RequestDeleteParams) {
+	return await this.makeRequest('DELETE', params);
   }
 
   private async makeRequest(

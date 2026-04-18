@@ -13,4 +13,6 @@ export type RequestPutParams = RequestBase & {
   body?: any;
 };
 
+export type RequestDeleteParams = RequestBase & {};
+
 export type RequestGetParams = RequestBase & {};
