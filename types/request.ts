@@ -1,6 +1,6 @@
 interface RequestBase {
   url: string;
-  token: string;
+  token?: string;
   headers?: Record<string, any>;
   failOnStatusCode?: boolean;
 }

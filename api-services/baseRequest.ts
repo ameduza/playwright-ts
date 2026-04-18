@@ -1,5 +1,9 @@
 import { APIRequestContext } from '@playwright/test';
-import { RequestDeleteParams, RequestGetParams, RequestPostParams } from '../types/request';
+import {
+  RequestDeleteParams,
+  RequestGetParams,
+  RequestPostParams,
+} from '../types/request';
 
 export class BaseRequest {
   private request: APIRequestContext;
@@ -8,15 +12,15 @@ export class BaseRequest {
   }
 
   async get(params: RequestGetParams) {
-	return await this.makeRequest('GET', params);
+    return await this.makeRequest('GET', params);
   }
 
   async post(params: RequestPostParams) {
-	return await this.makeRequest('POST', params);
+    return await this.makeRequest('POST', params);
   }
 
   async delete(params: RequestDeleteParams) {
-	return await this.makeRequest('DELETE', params);
+    return await this.makeRequest('DELETE', params);
   }
 
   private async makeRequest(
@@ -27,11 +31,11 @@ export class BaseRequest {
       method: method,
       headers: {
         'content-type': 'application/json',
-        Authorization: `Token ${params.token}`,
+        ...(params.token ? { Authorization: `Token ${params.token}` } : {}),
         ...params.headers,
       },
       data: 'body' in params ? JSON.stringify(params.body) : undefined,
-	  failOnStatusCode: params.failOnStatusCode ?? true,
+      failOnStatusCode: params.failOnStatusCode ?? true,
     });
   }
 }

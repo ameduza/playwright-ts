@@ -11,7 +11,7 @@ test('api first test', async ({ request }) => {
   expect(data.tags).toContain('tag1');
 });
 
-test('create article', async ({ articleApi }) => {
+test('create article', async ({ articleApiStep: articleApi }) => {
   const articleRequest = articleGenerator.generateArticleRequest();
 
   const actualArticle = (await articleApi.createArticle(articleRequest))
@@ -22,3 +22,5 @@ test('create article', async ({ articleApi }) => {
     tagList: expect.arrayContaining(articleRequest.tagList),
   });
 });
+
+
