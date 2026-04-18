@@ -3,7 +3,6 @@ import { TagsResponse } from '../types/tags-type';
 import { test } from '../fixtures/test-fixture';
 import articleGenerator from '../generators/articles-generator';
 
-
 test('api first test', async ({ request }) => {
   const response = await request.get(' http://localhost:8000/api/tags');
   const data = (await response.json()) as TagsResponse;
@@ -15,14 +14,11 @@ test('api first test', async ({ request }) => {
 test('create article', async ({ articleApi }) => {
   const articleRequest = articleGenerator.generateArticleRequest();
 
-  const actualArticle = (await articleApi.createArticle(articleRequest)).article;
+  const actualArticle = (await articleApi.createArticle(articleRequest))
+    .article;
 
-  expect(actualArticle.title).toBe(articleRequest.title);
-  expect(actualArticle.description).toBe(articleRequest.description);
-  expect(actualArticle.body).toBe(articleRequest.body);
-  expect(actualArticle.tagList).toEqual(
-    expect.arrayContaining(articleRequest.tagList),
-  );
-
-
+  expect(actualArticle).toMatchObject({
+    ...articleRequest,
+    tagList: expect.arrayContaining(articleRequest.tagList),
+  });
 });
