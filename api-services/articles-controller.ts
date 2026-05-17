@@ -13,11 +13,13 @@ export class ArticlesController {
   async createArticle(
     token: string,
     articleRequest: ArticleRequest,
+    failOnStatusCode?: boolean,
   ): Promise<APIResponse> {
     return await this.request.post({
       url: APIConfig.articles,
       token,
       body: { article: articleRequest },
+      failOnStatusCode,
     });
   }
 

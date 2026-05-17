@@ -9,7 +9,7 @@ export type ArticleResponse = {
   article: Article;
 };
 
-export type Article = {
+type Article = {
   title: string;
   slug: string;
   description: string;
@@ -22,10 +22,10 @@ export type Article = {
   tagList: string[];
 };
 
-export type Author = {
+type Author = {
   username: string;
   email: string;
   bio: string;
-  image: any;
+  image: string | null;
   following: boolean;
 };

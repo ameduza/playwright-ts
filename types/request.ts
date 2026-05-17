@@ -1,16 +1,16 @@
 interface RequestBase {
   url: string;
   token?: string;
-  headers?: Record<string, any>;
+  headers?: Record<string, string>;
   failOnStatusCode?: boolean;
 }
 
 export type RequestPostParams = RequestBase & {
-  body: any;
+  body: unknown;
 };
 
 export type RequestPutParams = RequestBase & {
-  body?: any;
+  body?: unknown;
 };
 
 export type RequestDeleteParams = RequestBase & {};
