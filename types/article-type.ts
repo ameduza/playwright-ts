@@ -26,6 +26,6 @@ export type Author = {
   username: string;
   email: string;
   bio: string;
-  image: any;
+  image: string | null;
   following: boolean;
 };
