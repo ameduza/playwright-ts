@@ -26,11 +26,9 @@ export default defineConfig({
   reporter: [['html', { outputFolder: 'tmp/playwright-report' }]],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    /* Base URL to use in actions like `await page.goto('')`. */
-    baseURL: process.env.BASE_URL ?? 'http://localhost:8000',
-
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    baseURL: process.env.BASE_URL ?? 'http://localhost:8000/#/',
+    trace: 'retain-on-failure-and-retries',
+    actionTimeout: 6_000,
   },
 
   /* Configure projects for major browsers */
@@ -64,7 +62,7 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: {
     command: 'npm run serve',
-    url: 'http://localhost:8000',
+    url: 'http://localhost:8000/#/',
     reuseExistingServer: !process.env.CI,
   },
 });
