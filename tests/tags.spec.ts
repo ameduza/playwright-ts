@@ -9,7 +9,7 @@ test('tags endpoint returns a non-empty list', async ({ tagsApiStep }) => {
 });
 
 test('return tag from the just added article', async ({ articleApiStep, tagsApiStep }) => {
-    const articleRequest = articleGenerator.generateArticleRequest();
+    const articleRequest = articleGenerator.getArticleRequest();
     await articleApiStep.createArticle(articleRequest);
     const tagsResponse = await tagsApiStep.getTags();
     expect(tagsResponse.tags).toContain(articleRequest.tagList[0]);

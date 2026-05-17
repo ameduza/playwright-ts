@@ -1,4 +1,4 @@
-import { APIRequestContext } from '@playwright/test';
+import { APIRequestContext, APIResponse, expect } from '@playwright/test';
 import { ArticleResponse, ArticleRequest } from '../types/article-type';
 import { ArticlesController } from '../api-services/articles-controller';
 
@@ -12,13 +12,21 @@ export class ArticleApiStep {
     this.token = token;
   }
 
+  async createArticleNoStatusCheck(
+    articleRequest: ArticleRequest,
+  ): Promise<APIResponse> {
+    return await this.controller.createArticle(
+      this.token,
+      articleRequest,
+      false,
+    );
+  }
+
   async createArticle(
     articleRequest: ArticleRequest,
   ): Promise<ArticleResponse> {
-    const response = await this.controller.createArticle(
-      this.token,
-      articleRequest,
-    );
+    const response = await this.createArticleNoStatusCheck(articleRequest);
+    expect(response.status()).toBe(201);
     const articleResponse = (await response.json()) as ArticleResponse;
     this.createdSlugs.push(articleResponse.article.slug);
     return articleResponse;
