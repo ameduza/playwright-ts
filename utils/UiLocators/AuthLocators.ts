@@ -26,4 +26,12 @@ export class AuthLocators {
   get signInNavLink(): Locator {
     return this.page.locator('nav a[href="#/login"]');
   }
+
+  get settingsNavLink(): Locator {
+    return this.page.locator('nav a[href="#/settings"]');
+  }
+
+  get logoutButton(): Locator {
+    return this.page.locator('button.btn-outline-danger');
+  }
 }

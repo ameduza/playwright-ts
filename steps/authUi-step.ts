@@ -23,15 +23,25 @@ export class AuthUiStep {
     await this.commonLocators.buttonByName('Sign in').click();
   }
 
-  async verifySuccessfulLogin(user: User): Promise<void> {
+  async verifyLoginSuccess(user: User): Promise<void> {
     await expect(this.authLocators.profileNavLink).toContainText(user.username);
     await expect(this.authLocators.signInNavLink).not.toBeVisible();
   }
 
-  async verifyErrorMessage(expectedMessage: string): Promise<void> {
+  async verifyLoginFailed(): Promise<void> {
+    await expect(this.page).toHaveURL(/login/);
     await expect(this.authLocators.errorMessages.first()).toHaveText(
-      expectedMessage,
+      'Invalid email or password',
     );
   }
 
+  async logout(): Promise<void> {
+    await this.authLocators.settingsNavLink.click();
+    await this.authLocators.logoutButton.click();
+  }
+
+  async verifyLogoutSuccess(): Promise<void> {
+    await expect(this.authLocators.signInNavLink).toBeVisible();
+    await expect(this.authLocators.profileNavLink).not.toBeVisible();
+  }
 }
