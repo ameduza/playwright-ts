@@ -23,10 +23,15 @@ export class ArticlesController {
     });
   }
 
-  async deleteArticleBySlug(token: string, slug: string): Promise<APIResponse> {
+  async deleteArticleBySlug(
+    token: string,
+    slug: string,
+    failOnStatusCode?: boolean,
+  ): Promise<APIResponse> {
     return await this.request.delete({
       url: APIConfig.articleBySlug(slug),
       token,
+      failOnStatusCode,
     });
   }
 

@@ -1,9 +1,11 @@
 import { Page } from '@playwright/test';
 import { ArticleLocators } from '../utils/UiLocators/ArticleLocators';
 import { CommonLocators } from '../utils/UiLocators/CommonLocators';
-import { ArticleRequest } from '../types/article-type';
+import { ArticleRequest, ArticleResponse } from '../types/article-type';
 import { ArticleApiStep } from './articleApi-step';
 import { APIConfig } from '../utils/configs/api-config';
+import { UIConfig } from '../utils/configs/ui-config';
+import { matchesResponse } from '../utils/response-helper';
 
 export class ArticleUiStep {
   private page: Page;
@@ -22,22 +24,32 @@ export class ArticleUiStep {
     await this.gotoEditor();
     await this.fillArticleForm(article);
 
-    const responsePromise = this.page.waitForResponse(
-      (response) =>
-        response.url().includes(APIConfig.articles) &&
-        response.request().method() === 'POST',
-    );
+    const responsePromise = this.page.waitForResponse(matchesResponse(APIConfig.articles, 'POST'));
     await this.submitArticleForm();
-    const response = await responsePromise;
-
-    const body = await response.json();
-    const slug: string = body.article.slug;
+    const responseBody = await (await responsePromise).json() as ArticleResponse;
+    const slug: string = responseBody.article.slug;
     this.articleApiStep.trackSlug(slug);
     return slug;
   }
 
+  async updateArticle(slug: string, article: ArticleRequest): Promise<string> {
+    await this.gotoEditorForSlug(slug);
+    await this.fillArticleForm(article);
+
+    const responsePromise = this.page.waitForResponse(matchesResponse(APIConfig.articleBySlug(slug), 'PUT'));
+    await this.submitArticleForm();
+    const responseBody = await (await responsePromise).json() as ArticleResponse;
+    const newSlug: string = responseBody.article.slug;
+    this.articleApiStep.trackSlug(newSlug);
+    return newSlug;
+  }
+
   private async gotoEditor(): Promise<void> {
     await this.articleLocators.newArticleNavLink.click();
+  }
+
+  private async gotoEditorForSlug(slug: string): Promise<void> {
+    await this.page.goto(UIConfig.editorPage(slug));
   }
 
   private async fillArticleForm(article: ArticleRequest): Promise<void> {

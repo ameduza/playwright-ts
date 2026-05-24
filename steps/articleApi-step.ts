@@ -40,12 +40,14 @@ export class ArticleApiStep {
   }
 
   trackSlug(slug: string): void {
-    this.createdSlugs.push(slug);
+    if (!this.createdSlugs.includes(slug)) {
+      this.createdSlugs.push(slug);
+    }
   }
 
   async cleanUpArticles(): Promise<void> {
     for (const slug of this.createdSlugs) {
-      await this.controller.deleteArticleBySlug(this.token, slug);
+      await this.controller.deleteArticleBySlug(this.token, slug, false);
     }
     this.createdSlugs = [];
   }

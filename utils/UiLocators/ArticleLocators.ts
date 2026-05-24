@@ -26,4 +26,8 @@ export class ArticleLocators {
   get newArticleNavLink(): Locator {
     return this.page.locator('nav a[href="#/editor"]');
   }
+
+  get editArticleButton(): Locator {
+    return this.page.getByRole('link', { name: 'Edit Article' }).first();
+  }
 }
