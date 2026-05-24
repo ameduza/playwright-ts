@@ -10,7 +10,7 @@ export class ArticlesController {
     this.request = new BaseRequest(request);
   }
 
-  async createArticle(
+  async postArticle(
     token: string,
     articleRequest: ArticleRequest,
     failOnStatusCode?: boolean,
@@ -23,8 +23,20 @@ export class ArticlesController {
     });
   }
 
-  async deleteArticleBySlug(token: string, slug: string): Promise<APIResponse> {
+  async deleteArticleBySlug(
+    token: string,
+    slug: string,
+    failOnStatusCode?: boolean,
+  ): Promise<APIResponse> {
     return await this.request.delete({
+      url: APIConfig.articleBySlug(slug),
+      token,
+      failOnStatusCode,
+    });
+  }
+
+  async getArticleBySlug(token: string, slug: string): Promise<APIResponse> {
+    return await this.request.get({
       url: APIConfig.articleBySlug(slug),
       token,
     });

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "serve": "python app/backend/manage.py runserver",
+    "serve": "app\\.venv\\Scripts\\python app/backend/manage.py runserver",
     "lint": "eslint ."
   },
   "repository": {
@@ -12,7 +12,7 @@
     "url": "git+https://github.com/ameduza/playwright-ts.git"
   },
   "keywords": [],
-  "author": "",
+  "author": "Aleksandr Maksimov",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {

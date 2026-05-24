@@ -9,7 +9,7 @@ export type ArticleResponse = {
   article: Article;
 };
 
-type Article = {
+export type Article = {
   title: string;
   slug: string;
   description: string;
