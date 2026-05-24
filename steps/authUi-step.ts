@@ -3,14 +3,14 @@ import { AuthLocators } from '../utils/UiLocators/AuthLocators';
 import { CommonLocators } from '../utils/UiLocators/CommonLocators';
 import { User } from '../types/user-type';
 import { expect } from '@playwright/test';
+import { BaseUiStep } from './baseUi-step';
 
-export class AuthUiStep {
-  private page: Page;
+export class AuthUiStep extends BaseUiStep {
   private authLocators: AuthLocators;
   private commonLocators: CommonLocators;
 
   constructor(page: Page) {
-    this.page = page;
+    super(page);
     this.authLocators = new AuthLocators(page);
     this.commonLocators = new CommonLocators(page);
   }
