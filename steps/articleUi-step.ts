@@ -2,7 +2,7 @@ import { Page } from '@playwright/test';
 import { ArticleLocators } from '../utils/UiLocators/ArticleLocators';
 import { CommonLocators } from '../utils/UiLocators/CommonLocators';
 import { ArticleRequest, ArticleResponse } from '../types/article-type';
-import { ArticleApiStep } from './articleApi-step';
+import { TestContext } from '../fixtures/test-context';
 import { APIConfig } from '../utils/configs/api-config';
 import { UIConfig } from '../utils/configs/ui-config';
 import { matchesResponse } from '../utils/response-helper';
@@ -11,13 +11,13 @@ import { BaseUiStep } from './baseUi-step';
 export class ArticleUiStep extends BaseUiStep {
   private articleLocators: ArticleLocators;
   private commonLocators: CommonLocators;
-  private articleApiStep: ArticleApiStep;
+  private context: TestContext;
 
-  constructor(page: Page, articleApiStep: ArticleApiStep) {
+  constructor(page: Page, context: TestContext) {
     super(page);
     this.articleLocators = new ArticleLocators(page);
     this.commonLocators = new CommonLocators(page);
-    this.articleApiStep = articleApiStep;
+    this.context = context;
   }
 
   async createArticle(article: ArticleRequest): Promise<string> {
@@ -28,7 +28,7 @@ export class ArticleUiStep extends BaseUiStep {
     await this.submitArticleForm();
     const responseBody = await (await responsePromise).json() as ArticleResponse;
     const slug: string = responseBody.article.slug;
-    this.articleApiStep.trackSlug(slug);
+    this.context.addArticle(responseBody.article);
     return slug;
   }
 
@@ -40,7 +40,7 @@ export class ArticleUiStep extends BaseUiStep {
     await this.submitArticleForm();
     const responseBody = await (await responsePromise).json() as ArticleResponse;
     const newSlug: string = responseBody.article.slug;
-    this.articleApiStep.trackSlug(newSlug);
+    this.context.addArticle(responseBody.article);
     return newSlug;
   }
 

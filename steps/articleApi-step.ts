@@ -1,15 +1,17 @@
 import { APIRequestContext, APIResponse, expect } from '@playwright/test';
 import { ArticleResponse, ArticleRequest, Article } from '../types/article-type';
 import { ArticlesController } from '../api-services/articles-controller';
+import { TestContext } from '../fixtures/test-context';
 
 export class ArticleApiStep {
   private controller: ArticlesController;
-  private createdSlugs: string[] = [];
   private token: string;
+  private context: TestContext;
 
-  constructor(request: APIRequestContext, token: string) {
+  constructor(request: APIRequestContext, token: string, context: TestContext) {
     this.controller = new ArticlesController(request);
     this.token = token;
+    this.context = context;
   }
 
   async createArticleNoStatusCheck(
@@ -28,7 +30,7 @@ export class ArticleApiStep {
     const response = await this.createArticleNoStatusCheck(articleRequest);
     expect(response.status()).toBe(201);
     const articleResponse = (await response.json()) as ArticleResponse;
-    this.trackSlug(articleResponse.article.slug);   
+    this.context.addArticle(articleResponse.article);
     return articleResponse;
   }
 
@@ -39,16 +41,9 @@ export class ArticleApiStep {
     return articleResponse.article;
   }
 
-  trackSlug(slug: string): void {
-    if (!this.createdSlugs.includes(slug)) {
-      this.createdSlugs.push(slug);
-    }
-  }
-
   async cleanUpArticles(): Promise<void> {
-    for (const slug of this.createdSlugs) {
-      await this.controller.deleteArticleBySlug(this.token, slug, false);
+    for (const article of this.context.articles) {
+      await this.controller.deleteArticleBySlug(this.token, article.slug, false);
     }
-    this.createdSlugs = [];
   }
 }
