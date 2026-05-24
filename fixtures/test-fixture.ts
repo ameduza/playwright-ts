@@ -6,36 +6,34 @@ import { ArticleUiStep } from '../steps/articleUi-step';
 import { AuthAPI } from '../api-services/auth-api';
 import { user01 } from './users';
 
-export type TestOptions = {
-  authApi: AuthAPI;
-  articleApiStep: ArticleApiStep;
-  tagsApiStep: TagsApiStep;
-  authUiStep: AuthUiStep;
-  articleUiStep: ArticleUiStep;
+type TestFixtures = {
+  api: {
+    authApi: AuthAPI;
+    articleApiStep: ArticleApiStep;
+    tagsApiStep: TagsApiStep;
+  };
+  ui: {
+    authUiStep: AuthUiStep;
+    articleUiStep: ArticleUiStep;
+  };
 };
 
-export const test = base.extend<TestOptions>({
-  authApi: async ({ request }, use) => {
+export const test = base.extend<TestFixtures>({
+  api: async ({ request }, use) => {
     const authApi = new AuthAPI(request);
-    await use(authApi);
-  },
-
-  authUiStep: async ({ page }, use) => {
-    await use(new AuthUiStep(page));
-  },
-
-  articleApiStep: async ({ authApi, request }, use) => {
     const token = await authApi.getToken(user01);
     const articleApiStep = new ArticleApiStep(request, token);
-    await use(articleApiStep);
+    await use({
+      authApi,
+      articleApiStep,
+      tagsApiStep: new TagsApiStep(request),
+    });
     await articleApiStep.cleanUpArticles();
   },
-
-  tagsApiStep: async ({ request }, use) => {
-    await use(new TagsApiStep(request));
-  },
-
-  articleUiStep: async ({ page, articleApiStep }, use) => {
-    await use(new ArticleUiStep(page, articleApiStep));
+  ui: async ({ page, api }, use) => {
+    await use({
+      authUiStep: new AuthUiStep(page),
+      articleUiStep: new ArticleUiStep(page, api.articleApiStep),
+    });
   },
 });

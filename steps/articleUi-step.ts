@@ -6,15 +6,15 @@ import { ArticleApiStep } from './articleApi-step';
 import { APIConfig } from '../utils/configs/api-config';
 import { UIConfig } from '../utils/configs/ui-config';
 import { matchesResponse } from '../utils/response-helper';
+import { BaseUiStep } from './baseUi-step';
 
-export class ArticleUiStep {
-  private page: Page;
+export class ArticleUiStep extends BaseUiStep {
   private articleLocators: ArticleLocators;
   private commonLocators: CommonLocators;
   private articleApiStep: ArticleApiStep;
 
   constructor(page: Page, articleApiStep: ArticleApiStep) {
-    this.page = page;
+    super(page);
     this.articleLocators = new ArticleLocators(page);
     this.commonLocators = new CommonLocators(page);
     this.articleApiStep = articleApiStep;

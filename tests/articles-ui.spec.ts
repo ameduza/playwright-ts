@@ -3,36 +3,29 @@ import { test } from '../fixtures/test-fixture';
 import { user01 } from '../fixtures/users';
 import articleGenerator from '../generators/articles-generator';
 
-test('create article via UI', async ({
-  authUiStep,
-  articleUiStep,
-  articleApiStep,
-}) => {
-  await authUiStep.login(user01.email, user01.password);
+test('create article via UI', async ({ ui, api }) => {
+  await ui.authUiStep.login(user01.email, user01.password);
   const expectedArticle = articleGenerator.getArticleNoTagsRequest();
 
-  const slug = await articleUiStep.createArticle(expectedArticle);
+  const slug = await ui.articleUiStep.createArticle(expectedArticle);
 
-  const actualArticle = await articleApiStep.getArticleBySlug(slug);
+  const actualArticle = await api.articleApiStep.getArticleBySlug(slug);
   expect(actualArticle).toMatchObject(expectedArticle);
 });
 
-test('update article via UI', async ({
-  authUiStep,
-  articleUiStep,
-  articleApiStep,
-}) => {
-  await authUiStep.login(user01.email, user01.password);
+test('update article via UI', async ({ ui, api }) => {
+  await ui.authUiStep.login(user01.email, user01.password);
 
-  const { article: created } =
-    await articleApiStep.createArticle(articleGenerator.getArticleNoTagsRequest());
+  const { article: created } = await api.articleApiStep.createArticle(
+    articleGenerator.getArticleNoTagsRequest(),
+  );
 
   const updatedArticle = articleGenerator.getArticleNoTagsRequest();
-  const newSlug = await articleUiStep.updateArticle(
+  const newSlug = await ui.articleUiStep.updateArticle(
     created.slug,
     updatedArticle,
   );
 
-  const actualArticle = await articleApiStep.getArticleBySlug(newSlug);
+  const actualArticle = await api.articleApiStep.getArticleBySlug(newSlug);
   expect(actualArticle).toMatchObject(updatedArticle);
 });
