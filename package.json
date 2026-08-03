@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "serve": "app\\.venv\\Scripts\\python app/backend/manage.py runserver",
+    "serve": "app/.venv/bin/python app/backend/manage.py runserver",
+    "winserve": "app\\.venv\\Scripts\\python app/backend/manage.py runserver",
     "lint": "eslint ."
   },
   "repository": {
@@ -22,7 +23,7 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@faker-js/faker": "^10.4.0",
-    "@playwright/test": "^1.59.1",
+    "@playwright/test": "^1.62.1",
     "@types/node": "^25.6.0",
     "eslint": "^10.2.1",
     "prettier": "3.8.3",

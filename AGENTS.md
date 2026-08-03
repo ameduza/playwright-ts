@@ -13,15 +13,17 @@ Test code is in the root folders; `app/` is the vendored app under test
 - Lint: `npm run lint`
 - Report: `npx playwright show-report tmp/playwright-report`
 
-## Start the backend manually (it will not auto-start)
+## Start the backend
 
-`npm run serve` hardcodes a Windows venv path (`app\.venv\Scripts\python`) and
-dies on Linux/macOS with `sh: 1: app.venvScriptspython: not found`. Playwright's
-`webServer` block runs that same script, so **test runs cannot start the server
-themselves here**. Start it yourself from the repo root:
+- `npm run serve` — Linux/macOS/WSL venv path (`app/.venv/bin/python`).
+- `npm run winserve` — native Windows venv path (`app\.venv\Scripts\python`).
+
+Playwright's `webServer` block runs `npm run serve`, so on Linux/WSL test runs
+can start the server themselves; on native Windows it will fail and you must
+start it via `npm run winserve` (or the raw python command) first.
 
 ```bash
-app/.venv/bin/python app/backend/manage.py runserver
+npm run serve
 ```
 
 `webServer.reuseExistingServer` is true off-CI, so Playwright reuses it.
