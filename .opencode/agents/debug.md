@@ -13,6 +13,13 @@ permission:
     "python -c": allow
     "pytest": allow
     "go test": allow
+    "npx playwright test*": allow
+    "npx playwright show-trace*": allow
+    "npx playwright show-report*": allow
+    "npx playwright --version*": allow
+    "curl *localhost*": allow
+    "app/.venv/bin/python -c*": allow
+    "git status*": allow
 ---
 
 You are working in debug mode. Your goal: find the exact cause of the
