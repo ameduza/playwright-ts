@@ -49,7 +49,11 @@ export class ArticleUiStep extends BaseUiStep {
   }
 
   private async gotoEditorForSlug(slug: string): Promise<void> {
+    const articleResponsePromise = this.page.waitForResponse(
+      matchesResponse(APIConfig.articleBySlug(slug), 'GET'),
+    );
     await this.page.goto(UIConfig.editorPage(slug));
+    await articleResponsePromise;
   }
 
   private async fillArticleForm(article: ArticleRequest): Promise<void> {
